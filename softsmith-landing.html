@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softsmith — Your toolbox, always within reach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EDF2F4;
+    --bg-soft: #E3E9EC;
+    --surface: #FFFFFF;
+    --surface-raised: #EEF2F4;
+    --hole: #C9D2D8;
+    --hole-rim: #FFFFFF;
+    --paper: #2B2D42;
+    --paper-dim: #5C6079;
+    --amber: #2B2D42;
+    --amber-dim: #454863;
+    --mint: #2B2D42;
+    --line: #D7DEE3;
+    --shadow: rgba(43,45,66,0.14);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--paper);
+  }
+
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+  }
+
+  .eyebrow::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--amber);
+    display:inline-block;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* Pegboard texture */
+  .pegboard{
+    background-image: radial-gradient(circle, var(--hole) 2.2px, transparent 2.6px);
+    background-size: 34px 34px;
+    background-position: 17px 17px;
+  }
+
+  .pegboard::selection, ::selection{
+    background: var(--amber);
+    color: var(--bg);
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(237,242,244,0.88);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.25rem;
+    letter-spacing:-0.01em;
+  }
+  .logo img{
+    height:84px;
+    width:auto;
+    display:block;
+  }
+  .nav-links{
+    display:flex;
+    gap:36px;
+    font-size:0.92rem;
+    color:var(--paper-dim);
+  }
+  .nav-links a:hover{ color:var(--paper); }
+  .nav-cta{
+    display:flex; align-items:center; gap:18px;
+  }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    letter-spacing:0.02em;
+    padding:11px 20px;
+    border-radius:6px;
+    border:1px solid var(--amber);
+    background:var(--amber);
+    color:var(--bg);
+    font-weight:500;
+    cursor:pointer;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    display:inline-block;
+  }
+  .btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(43,45,66,0.28);
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--paper);
+    border:1px solid var(--line);
+  }
+  .btn-ghost:hover{
+    border-color:var(--paper-dim);
+    box-shadow:none;
+  }
+  @media (max-width:860px){ .nav-links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 70px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:48px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 4.6vw, 3.6rem);
+    line-height:1.05;
+    margin:20px 0 22px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--amber);
+  }
+  .hero p{
+    font-size:1.08rem;
+    color:var(--paper-dim);
+    max-width:46ch;
+    margin-bottom:32px;
+  }
+  .hero-actions{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:34px;
+  }
+  .hero-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--paper-dim);
+  }
+
+  /* Hero pegboard panel with hanging tools */
+  .hero-panel{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:36px 28px 28px;
+    position:relative;
+  }
+  .hero-panel .pegboard{
+    position:absolute;
+    inset:0;
+    border-radius:14px;
+    opacity:0.9;
+  }
+  .rail{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px 18px;
+  }
+  .peg-item{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:18px 14px 16px;
+    text-align:left;
+    position:relative;
+    box-shadow:0 8px 18px var(--shadow);
+  }
+  .peg-item .hook{
+    position:absolute;
+    top:-13px; left:16px;
+    width:20px; height:20px;
+  }
+  .peg-item .icon{
+    width:30px; height:30px;
+    color:var(--amber);
+    margin-bottom:12px;
+  }
+  .peg-item h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.94rem;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .peg-item .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    color:var(--paper-dim);
+  }
+
+  /* ---------- LOGO STRIP ---------- */
+  .strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:22px 0;
+  }
+  .strip .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--paper-dim);
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- TOOL WALL SECTION ---------- */
+  .section{
+    padding:100px 0;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:56px;
+  }
+  .section-head h2{
+    font-size:clamp(1.9rem, 3vw, 2.5rem);
+    margin-top:14px;
+  }
+  .section-head p{
+    color:var(--paper-dim);
+    margin-top:14px;
+    font-size:1.02rem;
+  }
+
+  .tool-wall{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:56px 44px 44px;
+    position:relative;
+  }
+  .tool-wall .pegboard{
+    position:absolute; inset:0;
+    border-radius:18px;
+  }
+  .tool-grid{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:22px;
+  }
+  @media (max-width:980px){ .tool-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .tool-grid{ grid-template-columns:1fr; } }
+
+  .tool-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:26px 20px 22px;
+    position:relative;
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .tool-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--amber-dim);
+  }
+  .tool-card .hook{
+    position:absolute;
+    top:-15px; left:24px;
+    width:22px; height:22px;
+  }
+  .tool-card .icon-wrap{
+    width:44px; height:44px;
+    border-radius:9px;
+    background:var(--surface-raised);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+  }
+  .tool-card .icon-wrap svg{
+    width:24px; height:24px;
+    color:var(--amber);
+  }
+  .tool-card h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.02rem;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .tool-card p{
+    font-size:0.86rem;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+  }
+  .spec-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    color:var(--mint);
+    background:rgba(43,45,66,0.06);
+    border:1px solid rgba(43,45,66,0.16);
+    padding:4px 8px;
+    border-radius:5px;
+  }
+
+  /* ---------- BUNDLES ---------- */
+  .bundle-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  @media (max-width:900px){ .bundle-grid{ grid-template-columns:1fr; } }
+
+  .bundle-card{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:32px 28px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .bundle-card.featured{
+    border-color:var(--amber);
+    background:linear-gradient(180deg, var(--surface-raised), var(--bg-soft));
+  }
+  .bundle-card .badge{
+    position:absolute;
+    top:-13px; right:24px;
+    background:var(--amber);
+    color:var(--bg);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:20px;
+    font-weight:600;
+  }
+  .bundle-card .kit-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--paper-dim);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .bundle-card h3{
+    font-size:1.5rem;
+    margin-bottom:6px;
+  }
+  .bundle-card .price{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:2.1rem;
+    font-weight:700;
+    margin:14px 0 4px;
+  }
+  .bundle-card .price span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem;
+    font-weight:400;
+    color:var(--paper-dim);
+  }
+  .bundle-card .desc{
+    color:var(--paper-dim);
+    font-size:0.9rem;
+    margin-bottom:22px;
+  }
+  .bundle-list{
+    list-style:none;
+    margin:0 0 28px;
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+  }
+  .bundle-list li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:0.88rem;
+    color:var(--paper);
+  }
+  .bundle-list svg{
+    width:15px; height:15px;
+    flex-shrink:0;
+    margin-top:3px;
+    color:var(--mint);
+  }
+  .bundle-card .btn{
+    margin-top:auto;
+    text-align:center;
+    width:100%;
+  }
+
+  /* ---------- STRIP STATS (tape measure) ---------- */
+  .tape{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:0;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+  }
+  .tape .cell{
+    padding:34px 24px;
+    border-right:1px dashed var(--line);
+    text-align:left;
+  }
+  .tape .cell:last-child{ border-right:none; }
+  @media (max-width:760px){
+    .tape{ grid-template-columns:repeat(2,1fr); }
+    .tape .cell:nth-child(2){ border-right:none; }
+  }
+  .tape .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:2rem;
+    font-weight:700;
+    color:var(--amber);
+  }
+  .tape .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--paper-dim);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-top:6px;
+  }
+
+  /* ---------- PREORDER ---------- */
+  .preorder-panel{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:56px 48px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .preorder-panel .pegboard{
+    position:absolute; inset:0;
+    opacity:0.35;
+  }
+  .preorder-panel > *{ position:relative; z-index:2; }
+  @media (max-width:860px){ .preorder-panel{ grid-template-columns:1fr; padding:40px 26px; } }
+
+  .preorder-copy h2{
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    margin:14px 0 14px;
+  }
+  .preorder-copy p{
+    color:var(--paper-dim);
+    max-width:44ch;
+    margin-bottom:18px;
+  }
+  .preorder-price-note{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    color:var(--mint);
+  }
+  .preorder-price-note s{
+    color:var(--paper-dim);
+  }
+
+  .preorder-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:30px 26px;
+  }
+  .preorder-card .hook{
+    position:relative;
+    top:-45px; left:0;
+    width:22px; height:22px;
+    margin-bottom:-22px;
+  }
+  .field-group{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .field label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--paper-dim);
+  }
+  .field input, .field select{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:0.95rem;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    color:var(--paper);
+    border-radius:8px;
+    padding:12px 14px;
+    outline:none;
+    transition:border-color 0.15s ease;
+  }
+  .field input:focus, .field select:focus{
+    border-color:var(--amber);
+  }
+  .field select{
+    appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23C9C4B4' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+  }
+  .preorder-submit{
+    margin-top:20px;
+    width:100%;
+    border:none;
+    cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .preorder-fineprint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    color:var(--paper-dim);
+    margin-top:12px;
+    text-align:center;
+  }
+  .preorder-success{
+    text-align:center;
+    padding:20px 4px;
+  }
+  .preorder-success .icon-wrap{
+    width:52px; height:52px;
+    border-radius:50%;
+    background:rgba(43,45,66,0.08);
+    border:1px solid rgba(43,45,66,0.22);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 16px;
+  }
+  .preorder-success .icon-wrap svg{
+    width:24px; height:24px;
+    color:var(--mint);
+  }
+  .preorder-success h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.15rem;
+    margin-bottom:8px;
+  }
+  .preorder-success p{
+    color:var(--paper-dim);
+    font-size:0.88rem;
+  }
+  .preorder-error{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+    color:#F09A6C;
+    min-height:1.2em;
+  }
+
+  /* ---------- CTA ---------- */
+  .cta-panel{
+    background:var(--paper);
+    border:1px solid var(--paper);
+    border-radius:20px;
+    padding:64px 48px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-panel .pegboard{
+    position:absolute; inset:0;
+    opacity:0.5;
+    background-image: radial-gradient(circle, rgba(237,242,244,0.14) 2.2px, transparent 2.6px);
+  }
+  .cta-panel > *{ position:relative; z-index:2; }
+  .cta-panel .eyebrow{ color:var(--bg); }
+  .cta-panel .eyebrow::before{ background:var(--bg); }
+  .cta-panel h2{
+    font-size:clamp(1.8rem, 3.4vw, 2.6rem);
+    margin-bottom:16px;
+    color:var(--bg);
+  }
+  .cta-panel p{
+    color:#AEB4C9;
+    max-width:50ch;
+    margin:0 auto 30px;
+  }
+  .cta-actions{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .cta-panel .btn{
+    background:var(--bg);
+    border-color:var(--bg);
+    color:var(--paper);
+  }
+  .cta-panel .btn:hover{
+    box-shadow:0 6px 18px rgba(0,0,0,0.35);
+  }
+  .cta-panel .btn-ghost{
+    background:transparent;
+    color:var(--bg);
+    border:1px solid rgba(237,242,244,0.4);
+  }
+  .cta-panel .btn-ghost:hover{
+    border-color:var(--bg);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:48px 0 32px;
+  }
+  .foot-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:32px;
+    margin-bottom:40px;
+  }
+  @media (max-width:760px){ .foot-grid{ grid-template-columns:1fr 1fr; } }
+  .foot-grid h5{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+  }
+  .foot-grid ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-grid a{ font-size:0.88rem; color:var(--paper); }
+  .foot-grid a:hover{ color:var(--amber); }
+  .foot-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.76rem;
+    color:var(--paper-dim);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+
+  @media (max-width:980px){
+    .hero-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">
+      <img src="softsmith-logo.png" alt="Softsmith">
+    </div>
+    <div class="nav-links">
+      <a href="#tools">Tools</a>
+      <a href="#bundles">Bundles</a>
+      <a href="#stats">Why Softsmith</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Log in</a>
+      <a href="#preorder" class="btn">Preorder now</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Preordering now — one-time price, not a subscription</span>
+        <h1>Your toolbox,<br>always <em>within reach</em>.</h1>
+        <p>Softsmith hangs the apps you reach for most — QR codes, image conversion, PDFs, and more — on one wall you can open in five seconds. No installs, no clutter, no hunting through tabs.</p>
+        <div class="hero-actions">
+          <a href="#preorder" class="btn">Preorder your kit</a>
+          <a href="#tools" class="btn btn-ghost">See all tools ↓</a>
+        </div>
+        <div class="hero-note">14 tools · 3 kits · pay once, own it — no monthly billing</div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="pegboard"></div>
+        <div class="rail">
+          <div class="peg-item">
+            <svg class="hook" viewBox="0 0 20 20" fill="none"><path d="M10 1 L10 6" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/></svg>
+            <h4>QR Generator</h4>
+            <div class="tag">.PNG / .SVG</div>
+          </div>
+          <div class="peg-item">
+            <svg class="hook" viewBox="0 0 20 20" fill="none"><path d="M10 1 L10 6" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+            <h4>JPEG Converter</h4>
+            <div class="tag">HEIC → JPG</div>
+          </div>
+          <div class="peg-item">
+            <svg class="hook" viewBox="0 0 20 20" fill="none"><path d="M10 1 L10 6" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M14 2v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+            <h4>PDF Merger</h4>
+            <div class="tag">Up to 50 files</div>
+          </div>
+          <div class="peg-item">
+            <svg class="hook" viewBox="0 0 20 20" fill="none"><path d="M10 1 L10 6" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><circle cx="12" cy="13" r="2.5"/></svg>
+            <h4>BG Remover</h4>
+            <div class="tag">1-click cutout</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="wrap">
+      <span>Built for</span>
+      <span>Freelancers</span>
+      <span>Small teams</span>
+      <span>Students</span>
+      <span>Makers</span>
+      <span>Support desks</span>
+    </div>
+  </div>
+
+  <!-- TOOL WALL -->
+  <section class="section" id="tools">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The wall</span>
+        <h2>Fourteen tools. One place to hang them.</h2>
+        <p>Every Softsmith app works straight from the browser — no downloads, no formatting to fight with. Pick a bundle below, or use tools individually as you need them.</p>
+      </div>
+
+      <div class="tool-wall">
+        <div class="pegboard"></div>
+        <div class="tool-grid">
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/></svg></div>
+            <h4>QR Generator</h4>
+            <p>Build scannable codes for links, Wi-Fi, or contact cards in seconds.</p>
+            <span class="spec-tag">Starter · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg></div>
+            <h4>JPEG Converter</h4>
+            <p>Convert HEIC, WebP, PNG, and RAW files to JPEG without losing quality.</p>
+            <span class="spec-tag">Starter · Creator · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M14 2v5h5"/><path d="M9 13h6M9 17h4"/></svg></div>
+            <h4>PDF Merger</h4>
+            <p>Combine, split, and reorder PDF pages by dragging them into place.</p>
+            <span class="spec-tag">Creator · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><circle cx="12" cy="13" r="2.5"/></svg></div>
+            <h4>Background Remover</h4>
+            <p>Cut out backgrounds from product or portrait photos automatically.</p>
+            <span class="spec-tag">Creator · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="11" width="18" height="8" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="15" r="1.4"/></svg></div>
+            <h4>Password Generator</h4>
+            <p>Create strong, memorable passwords and store nothing you don't need to.</p>
+            <span class="spec-tag">Starter · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17L9 5l4 8 3-5 5 9"/><path d="M3 21h18"/></svg></div>
+            <h4>Unit Converter</h4>
+            <p>Switch between metric, imperial, currency, and file-size units instantly.</p>
+            <span class="spec-tag">Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18 4.5 4.5 0 010-9 4.5 4.5 0 000-9z"/></svg></div>
+            <h4>Colour Picker</h4>
+            <p>Pull hex, RGB, and HSL values from any image, then build a palette.</p>
+            <span class="spec-tag">Creator · Everything</span>
+          </div>
+
+          <div class="tool-card">
+            <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 4v16"/></svg></div>
+            <h4>File Compressor</h4>
+            <p>Shrink images, PDFs, and folders into lighter files worth sharing.</p>
+            <span class="spec-tag">Starter · Creator · Everything</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUNDLES -->
+  <section class="section" id="bundles">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kits, not clutter</span>
+        <h2>Pick the kit that matches your bench.</h2>
+        <p>Every kit is a single one-time payment — full, unlimited access to its tools, for good. No subscriptions, no per-use fees, no watermarks. Preorder now to lock in the launch price.</p>
+      </div>
+
+      <div class="bundle-grid">
+        <div class="bundle-card">
+          <div class="kit-label">Starter Kit</div>
+          <h3>Everyday</h3>
+          <div class="price">Free <span>always</span></div>
+          <p class="desc">The essentials most people reach for on a normal day.</p>
+          <ul class="bundle-list">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>QR Generator</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>JPEG Converter</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Password Generator</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>File Compressor</li>
+          </ul>
+          <a href="#preorder" class="btn btn-ghost preorder-select" data-kit="Starter Kit — Free">Reserve Starter Kit</a>
+        </div>
+
+        <div class="bundle-card featured">
+          <div class="badge">Most hung</div>
+          <div class="kit-label">Creator Kit</div>
+          <h3>For image &amp; design work</h3>
+          <div class="price">$39 <span>one-time · <s>$59</s> preorder</span></div>
+          <p class="desc">Everything in Starter, plus the tools built for visual work. Pay once, yours for good.</p>
+          <ul class="bundle-list">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Everything in Starter</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>PDF Merger</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Background Remover</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Colour Picker</li>
+          </ul>
+          <a href="#preorder" class="btn preorder-select" data-kit="Creator Kit — $39 one-time">Preorder Creator Kit</a>
+        </div>
+
+        <div class="bundle-card">
+          <div class="kit-label">Everything Kit</div>
+          <h3>The whole wall</h3>
+          <div class="price">$69 <span>one-time · <s>$99</s> preorder</span></div>
+          <p class="desc">All 14 tools, priority processing, and team sharing. One payment, no renewals.</p>
+          <ul class="bundle-list">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Every tool, unlimited use</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Unit Converter</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Shared team bundles</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Priority processing</li>
+          </ul>
+          <a href="#preorder" class="btn btn-ghost preorder-select" data-kit="Everything Kit — $69 one-time">Preorder Everything Kit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREORDER -->
+  <section class="section" id="preorder" style="padding-top:0;">
+    <div class="wrap">
+      <div class="preorder-panel">
+        <div class="pegboard"></div>
+
+        <div class="preorder-copy">
+          <span class="eyebrow">Preorder</span>
+          <h2>Reserve your kit before launch.</h2>
+          <p>Softsmith isn't live yet — preordering locks in your kit at the launch price, one payment, no monthly billing. We'll email you the day it opens.</p>
+          <div class="preorder-price-note">
+            <span>Preorder pricing</span>
+            <span><s>$59</s> $39 Creator · <s>$99</s> $69 Everything</span>
+          </div>
+        </div>
+
+        <div class="preorder-card">
+          <svg class="hook" viewBox="0 0 22 22" fill="none"><path d="M11 1v7" stroke="#9BA3B4" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="1" r="2" fill="#9BA3B4"/></svg>
+
+          <form id="preorderForm">
+            <div class="field-group">
+              <div class="field">
+                <label for="preorderEmail">Email address</label>
+                <input type="email" id="preorderEmail" name="email" placeholder="you@example.com" required>
+              </div>
+              <div class="field">
+                <label for="preorderKit">Kit</label>
+                <select id="preorderKit" name="kit">
+                  <option value="Starter Kit — Free">Starter Kit — free</option>
+                  <option value="Creator Kit — $39 one-time" selected>Creator Kit — $39 one-time</option>
+                  <option value="Everything Kit — $69 one-time">Everything Kit — $69 one-time</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn preorder-submit">Reserve my kit</button>
+            <div class="preorder-error" id="preorderError"></div>
+          </form>
+
+          <div class="preorder-success" id="preorderSuccess" style="display:none;">
+            <div class="icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h4>You're on the wall.</h4>
+            <p id="preorderSuccessDetail">We'll email you the moment your kit is ready to unlock.</p>
+          </div>
+
+          <div class="preorder-fineprint">No charge today · one-time payment at launch · unsubscribe anytime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section" id="stats" style="padding-top:0;">
+    <div class="wrap">
+      <div class="tape">
+        <div class="cell">
+          <div class="num">14</div>
+          <div class="label">Tools on the wall</div>
+        </div>
+        <div class="cell">
+          <div class="num">0s</div>
+          <div class="label">Install time</div>
+        </div>
+        <div class="cell">
+          <div class="num">100%</div>
+          <div class="label">Browser-based</div>
+        </div>
+        <div class="cell">
+          <div class="num">3</div>
+          <div class="label">Kits to choose from</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="cta-panel">
+        <div class="pegboard"></div>
+        <span class="eyebrow">Ready when you are</span>
+        <h2>Reserve your kit, not a subscription.</h2>
+        <p>One payment at launch. No monthly billing, no renewal to forget about. Preorder now and we'll email you the moment it's ready to unlock.</p>
+        <div class="cta-actions">
+          <a href="#preorder" class="btn">Preorder your kit</a>
+          <a href="#tools" class="btn btn-ghost">Browse all tools</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="margin-bottom:12px;">
+          <img src="softsmith-logo.png" alt="Softsmith">
+        </div>
+        <p style="color:var(--paper-dim); font-size:0.88rem; max-width:32ch;">The toolbox that lives in your browser. Everyday apps, hung and ready.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#tools">All tools</a></li>
+          <li><a href="#bundles">Bundles</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Softsmith. All tools hung, none dropped.</span>
+      <span>Made for people who just need it done.</span>
+      <a href="#" id="exportPreorders" style="color:var(--paper-dim); text-decoration:underline; text-underline-offset:3px;">Export preorders (.json)</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Clicking a kit's button jumps to the preorder form and pre-selects that kit
+  document.querySelectorAll('.preorder-select').forEach(function(el){
+    el.addEventListener('click', function(){
+      var kit = el.getAttribute('data-kit');
+      var select = document.getElementById('preorderKit');
+      if (kit && select) {
+        for (var i = 0; i < select.options.length; i++){
+          if (select.options[i].value === kit){ select.selectedIndex = i; break; }
+        }
+      }
+    });
+  });
+
+  // ---- Preorder storage -------------------------------------------------
+  // If a backend is deployed, set this to its URL and submissions go straight
+  // to the server (see backend/server.js for a ready-to-run example).
+  // Leave it blank to fall back to this browser's localStorage, which is
+  // fine for local testing but only stores entries on this one device/browser.
+  var PREORDER_API_URL = ''; // e.g. 'https://api.softsmith.com/preorder'
+  var LOCAL_KEY = 'softsmith_preorders';
+
+  function loadLocalPreorders(){
+    try {
+      var raw = localStorage.getItem(LOCAL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveLocalPreorder(entry){
+    var list = loadLocalPreorders();
+    var existing = list.find(function(p){ return p.email.toLowerCase() === entry.email.toLowerCase(); });
+    if (existing) {
+      existing.kit = entry.kit;
+      existing.submittedAt = entry.submittedAt;
+    } else {
+      list.push(entry);
+    }
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+    return list;
+  }
+
+  var form = document.getElementById('preorderForm');
+  var errorEl = document.getElementById('preorderError');
+  var successEl = document.getElementById('preorderSuccess');
+  var successDetail = document.getElementById('preorderSuccessDetail');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    errorEl.textContent = '';
+
+    var email = document.getElementById('preorderEmail').value.trim();
+    var kit = document.getElementById('preorderKit').value;
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      errorEl.textContent = 'Enter a valid email address.';
+      return;
+    }
+
+    var submitBtn = form.querySelector('.preorder-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Reserving…';
+
+    var entry = { email: email, kit: kit, submittedAt: new Date().toISOString() };
+
+    try {
+      if (PREORDER_API_URL) {
+        var res = await fetch(PREORDER_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        if (!res.ok) throw new Error('Server responded with ' + res.status);
+      } else {
+        saveLocalPreorder(entry);
+      }
+
+      form.style.display = 'none';
+      successDetail.textContent = "We'll email " + email + " the moment your " + kit.split(' — ')[0] + " is ready to unlock.";
+      successEl.style.display = 'block';
+    } catch (err) {
+      errorEl.textContent = "Couldn't save your preorder — please try again.";
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Reserve my kit';
+    }
+  });
+
+  // Owner-only export: downloads every locally-stored preorder as preorders.json
+  // (Once PREORDER_API_URL is set, export happens server-side instead — see backend/server.js)
+  var exportBtn = document.getElementById('exportPreorders');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      var list = loadLocalPreorders();
+      var blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'preorders.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+</script>
+
+</body>
+</html>
