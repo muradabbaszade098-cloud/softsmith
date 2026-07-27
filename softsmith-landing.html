@@ -101,9 +101,10 @@
     align-items:center;
     justify-content:space-between;
     gap:12px;
-    padding:12px clamp(16px, 4vw, 32px);
+    padding:6px clamp(16px, 4vw, 32px);
     max-width:1180px;
     margin:0 auto;
+    min-height:52px;
   }
   .logo{
     display:flex;
@@ -120,15 +121,22 @@
     width:auto;
     display:block;
   }
+  header .logo img{
+    height:clamp(32px, 5vw, 40px);
+  }
   .nav-links{
     display:flex;
     gap:36px;
-    font-size:0.92rem;
+    font-size:0.88rem;
     color:var(--paper-dim);
   }
   .nav-links a:hover{ color:var(--paper); }
   .nav-cta{
-    display:flex; align-items:center; gap:18px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .nav-cta .btn{
+    padding:8px 14px;
+    font-size:0.78rem;
   }
   .btn{
     font-family:'IBM Plex Mono', monospace;
@@ -736,14 +744,13 @@
   /* ---------- FOOTER ---------- */
   footer{
     border-top:1px solid var(--line);
-    padding:24px 0 18px;
+    padding:48px 0 32px;
   }
   .foot-grid{
     display:grid;
     grid-template-columns:1.6fr 1fr 1fr;
-    gap:20px 32px;
-    margin-bottom:18px;
-    align-items:start;
+    gap:32px;
+    margin-bottom:40px;
   }
   .foot-grid h5{
     font-family:'IBM Plex Mono', monospace;
@@ -751,27 +758,27 @@
     text-transform:uppercase;
     letter-spacing:0.08em;
     color:var(--paper-dim);
-    margin-bottom:10px;
+    margin-bottom:14px;
   }
-  .foot-grid ul{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .foot-grid ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
   .foot-grid a{ font-size:0.88rem; color:var(--paper); }
   .foot-grid a:hover{ color:var(--amber); }
   footer .logo{
-    margin-bottom:6px;
+    margin-bottom:12px;
   }
   footer .logo img{
-    height:36px;
+    height:clamp(44px, 7vw, 64px);
   }
   .foot-bottom{
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
-    gap:8px;
-    padding-top:14px;
+    gap:12px;
+    padding-top:24px;
     border-top:1px solid var(--line);
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
+    font-size:0.76rem;
     color:var(--paper-dim);
   }
 
@@ -1210,10 +1217,10 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <div class="logo">
+        <div class="logo" style="margin-bottom:12px;">
           <img src="softsmith-logo.png" alt="Softsmith">
         </div>
-        <p style="color:var(--paper-dim); font-size:0.82rem; max-width:32ch; line-height:1.4;">The toolbox that lives on your machine. Everyday apps, hung and ready — 100% offline.</p>
+        <p style="color:var(--paper-dim); font-size:0.88rem; max-width:32ch;">The toolbox that lives on your machine. Everyday apps, hung and ready — 100% offline.</p>
       </div>
       <div>
         <h5>Product</h5>
