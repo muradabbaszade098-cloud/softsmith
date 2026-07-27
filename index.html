@@ -736,13 +736,14 @@
   /* ---------- FOOTER ---------- */
   footer{
     border-top:1px solid var(--line);
-    padding:48px 0 32px;
+    padding:24px 0 18px;
   }
   .foot-grid{
     display:grid;
     grid-template-columns:1.6fr 1fr 1fr;
-    gap:32px;
-    margin-bottom:40px;
+    gap:20px 32px;
+    margin-bottom:18px;
+    align-items:start;
   }
   .foot-grid h5{
     font-family:'IBM Plex Mono', monospace;
@@ -750,21 +751,27 @@
     text-transform:uppercase;
     letter-spacing:0.08em;
     color:var(--paper-dim);
-    margin-bottom:14px;
+    margin-bottom:10px;
   }
-  .foot-grid ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-grid ul{ list-style:none; display:flex; flex-direction:column; gap:6px; }
   .foot-grid a{ font-size:0.88rem; color:var(--paper); }
   .foot-grid a:hover{ color:var(--amber); }
+  footer .logo{
+    margin-bottom:6px;
+  }
+  footer .logo img{
+    height:48px;
+  }
   .foot-bottom{
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
-    gap:12px;
-    padding-top:24px;
+    gap:8px;
+    padding-top:14px;
     border-top:1px solid var(--line);
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.76rem;
+    font-size:0.72rem;
     color:var(--paper-dim);
   }
 
@@ -1203,10 +1210,10 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <div class="logo" style="margin-bottom:12px;">
+        <div class="logo">
           <img src="softsmith-logo.png" alt="Softsmith">
         </div>
-        <p style="color:var(--paper-dim); font-size:0.88rem; max-width:32ch;">The toolbox that lives on your machine. Everyday apps, hung and ready — 100% offline.</p>
+        <p style="color:var(--paper-dim); font-size:0.82rem; max-width:32ch; line-height:1.4;">The toolbox that lives on your machine. Everyday apps, hung and ready — 100% offline.</p>
       </div>
       <div>
         <h5>Product</h5>
