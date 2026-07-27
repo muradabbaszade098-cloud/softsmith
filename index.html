@@ -95,6 +95,7 @@
     background:rgba(237,242,244,0.88);
     backdrop-filter: blur(10px);
     border-bottom:1px solid var(--line);
+    overflow:visible;
   }
   nav{
     display:flex;
@@ -106,6 +107,7 @@
     margin:0 auto;
     height:52px;
     min-height:52px;
+    overflow:visible;
   }
   .logo{
     display:flex;
@@ -122,8 +124,13 @@
     width:auto;
     display:block;
   }
+  header .logo{
+    position:relative;
+    z-index:2;
+    overflow:visible;
+  }
   header .logo img{
-    height:clamp(52px, 8vw, 72px);
+    height:clamp(80px, 12vw, 110px);
   }
   .nav-links{
     display:flex;
