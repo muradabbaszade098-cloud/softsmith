@@ -8,7 +8,7 @@
     "build": "echo 'Static site — no build step'"
   },
   "dependencies": {
-    "@netlify/blobs": "^8.1.0"
+    "@netlify/blobs": "^9.1.0"
   },
   "engines": {
     "node": ">=18"

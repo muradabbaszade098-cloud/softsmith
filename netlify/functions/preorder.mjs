@@ -1,97 +1,100 @@
 import { getStore } from "@netlify/blobs";
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
+const STORE_NAME = "softsmith-preorders";
 const STORE_KEY = "preorders.json";
-const LOCAL_FILE = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "data",
-  "preorders.json"
-);
+
+// Local fallback for `netlify dev` only — never use import.meta.url (breaks under Netlify's CJS bundle).
+const LOCAL_FILE = join(process.cwd(), "data", "preorders.json");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Content-Type": "application/json",
 };
 
-function json(statusCode, body) {
-  return {
-    statusCode,
-    headers: corsHeaders,
-    body: JSON.stringify(body, null, 2),
-  };
+function jsonResponse(status, body) {
+  return new Response(JSON.stringify(body, null, 2), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 }
 
 function isValidEmail(email) {
   return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
-async function loadPreorders() {
-  // Prefer Netlify Blobs in production; fall back to local JSON file for `netlify dev`.
+function isNetlifyRuntime() {
+  return Boolean(process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
+}
+
+function loadFromFile() {
   try {
-    const store = getStore("softsmith-preorders");
+    if (!existsSync(LOCAL_FILE)) return null;
+    const parsed = JSON.parse(readFileSync(LOCAL_FILE, "utf8"));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return null;
+  }
+}
+
+function saveToFile(list) {
+  const dir = join(process.cwd(), "data");
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  writeFileSync(LOCAL_FILE, JSON.stringify(list, null, 2) + "\n", "utf8");
+}
+
+async function loadPreorders() {
+  try {
+    const store = getStore(STORE_NAME);
     const data = await store.get(STORE_KEY, { type: "json" });
     if (Array.isArray(data)) return data;
-  } catch {
-    // Blobs unavailable locally without Netlify identity — use file.
+  } catch (err) {
+    console.warn("Blobs load failed:", err?.message || err);
   }
 
-  try {
-    if (existsSync(LOCAL_FILE)) {
-      const raw = readFileSync(LOCAL_FILE, "utf8");
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    }
-  } catch {
-    // ignore corrupt local file
+  if (!isNetlifyRuntime()) {
+    const fromFile = loadFromFile();
+    if (fromFile) return fromFile;
   }
 
   return [];
 }
 
 async function savePreorders(list) {
-  let blobOk = false;
   try {
-    const store = getStore("softsmith-preorders");
+    const store = getStore(STORE_NAME);
     await store.setJSON(STORE_KEY, list);
-    blobOk = true;
-  } catch {
-    // fall through to file write
+    return;
+  } catch (err) {
+    console.warn("Blobs save failed:", err?.message || err);
+    if (isNetlifyRuntime()) throw err;
   }
 
-  try {
-    const dir = dirname(LOCAL_FILE);
-    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-    writeFileSync(LOCAL_FILE, JSON.stringify(list, null, 2) + "\n", "utf8");
-  } catch (err) {
-    if (!blobOk) throw err;
-  }
+  // Local `netlify dev` / offline fallback
+  saveToFile(list);
 }
 
-export async function handler(event) {
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers: corsHeaders, body: "" };
+export default async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("", { status: 204, headers: corsHeaders });
   }
 
-  if (event.httpMethod === "GET") {
+  if (req.method === "GET") {
     const list = await loadPreorders();
-    return json(200, list);
+    return jsonResponse(200, list);
   }
 
-  if (event.httpMethod !== "POST") {
-    return json(405, { error: "Method not allowed" });
+  if (req.method !== "POST") {
+    return jsonResponse(405, { error: "Method not allowed" });
   }
 
   let payload;
   try {
-    payload = JSON.parse(event.body || "{}");
+    payload = await req.json();
   } catch {
-    return json(400, { error: "Invalid JSON body" });
+    return jsonResponse(400, { error: "Invalid JSON body" });
   }
 
   const email = String(payload.email || "").trim();
@@ -99,10 +102,10 @@ export async function handler(event) {
   const submittedAt = payload.submittedAt || new Date().toISOString();
 
   if (!isValidEmail(email)) {
-    return json(400, { error: "Enter a valid email address." });
+    return jsonResponse(400, { error: "Enter a valid email address." });
   }
   if (!kit) {
-    return json(400, { error: "Kit is required." });
+    return jsonResponse(400, { error: "Kit is required." });
   }
 
   const entry = { email, kit, submittedAt };
@@ -118,5 +121,5 @@ export async function handler(event) {
 
   await savePreorders(list);
 
-  return json(200, { ok: true, entry, total: list.length });
-}
+  return jsonResponse(200, { ok: true, entry, total: list.length });
+};
