@@ -20,8 +20,4 @@ npx netlify deploy --prod
 - Form posts to `/api/preorder` (Netlify Function)
 - Production: emails are stored as JSON in **Netlify Blobs** (`preorders.json`)
 - Local `netlify dev`: also written to `data/preorders.json`
-- Footer **Export preorders (.json)** downloads the full list
-
-### View / export emails
-- Site footer → “Export preorders (.json)”
-- Or open: `https://YOUR-SITE.netlify.app/api/preorders`
+- View the list: `https://YOUR-SITE.netlify.app/api/preorders`

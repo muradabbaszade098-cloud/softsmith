@@ -1060,7 +1060,6 @@
     <div class="foot-bottom">
       <span>© 2026 Softsmith. All tools hung, none dropped.</span>
       <span>Made for people who just need it done.</span>
-      <a href="#" id="exportPreorders" style="color:var(--paper-dim); text-decoration:underline; text-underline-offset:3px;">Export preorders (.json)</a>
     </div>
   </div>
 </footer>
@@ -1106,18 +1105,6 @@
     }
     localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
     return list;
-  }
-
-  function downloadJson(list){
-    var blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'preorders.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   }
 
   var form = document.getElementById('preorderForm');
@@ -1174,23 +1161,6 @@
     successDetail.textContent = "We'll email " + email + " the moment your " + kit.split(' — ')[0] + " is ready to unlock.";
     successEl.style.display = 'block';
   });
-
-  // Downloads every stored preorder as preorders.json (from API, else localStorage)
-  var exportBtn = document.getElementById('exportPreorders');
-  if (exportBtn) {
-    exportBtn.addEventListener('click', async function(e){
-      e.preventDefault();
-      try {
-        var res = await fetch(PREORDER_API_URL);
-        if (res.ok) {
-          var list = await res.json();
-          downloadJson(Array.isArray(list) ? list : []);
-          return;
-        }
-      } catch (_) {}
-      downloadJson(loadLocalPreorders());
-    });
-  }
 </script>
 
 </body>
