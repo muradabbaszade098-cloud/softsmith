@@ -1,0 +1,16 @@
+{
+  "name": "softsmith",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Softsmith landing page — Netlify deploy with preorder email storage",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site — no build step'"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
