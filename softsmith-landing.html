@@ -101,10 +101,11 @@
     align-items:center;
     justify-content:space-between;
     gap:16px;
-    padding:10px clamp(16px, 4vw, 32px);
+    padding:0 clamp(16px, 4vw, 32px);
     max-width:1180px;
     margin:0 auto;
-    min-height:72px;
+    height:20px;
+    min-height:20px;
   }
   .logo{
     display:flex;
@@ -122,12 +123,12 @@
     display:block;
   }
   header .logo img{
-    height:clamp(52px, 8vw, 72px);
+    height:20px;
   }
   .nav-links{
     display:flex;
     gap:36px;
-    font-size:0.92rem;
+    font-size:0.72rem;
     color:var(--paper-dim);
   }
   .nav-links a:hover{ color:var(--paper); }
@@ -135,8 +136,9 @@
     display:flex; align-items:center; gap:14px;
   }
   .nav-cta .btn{
-    padding:10px 18px;
-    font-size:0.82rem;
+    padding:2px 8px;
+    font-size:0.65rem;
+    line-height:1;
   }
   .btn{
     font-family:'IBM Plex Mono', monospace;
