@@ -404,11 +404,21 @@
     color:var(--paper-dim);
     letter-spacing:0.08em;
     text-transform:uppercase;
-    margin-bottom:10px;
+    margin-bottom:8px;
   }
   .bundle-card h3{
-    font-size:1.5rem;
-    margin-bottom:6px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(1.75rem, 3vw, 2.15rem);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    color:var(--paper);
+    margin-bottom:4px;
+    line-height:1.15;
+  }
+  .bundle-card .bundle-tagline{
+    font-size:0.95rem;
+    color:var(--paper-dim);
+    margin-bottom:2px;
   }
   .bundle-card .price{
     font-family:'Space Grotesk', sans-serif;
@@ -1097,9 +1107,11 @@
       </div>
 
       <div class="bundle-grid">
-        <div class="bundle-card">
-          <div class="kit-label">Student Kit</div>
-          <h3>Built for campus life</h3>
+        <div class="bundle-card featured">
+          <div class="badge">Most hung</div>
+          <div class="kit-label">Kit</div>
+          <h3>Student</h3>
+          <p class="bundle-tagline">Built for campus life</p>
           <div class="price">$20 <span>one-time</span></div>
           <p class="desc">Schedules, notes, assignments, and internship tracking — offline and ready for class.</p>
           <ul class="bundle-list">
@@ -1109,13 +1121,13 @@
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Custom Music Player</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Internship Application Tracker</li>
           </ul>
-          <a href="#preorder" class="btn btn-ghost preorder-select" data-kit="Student Kit — $20 one-time">Preorder Student Kit</a>
+          <a href="#preorder" class="btn preorder-select" data-kit="Student Kit — $20 one-time">Preorder Student Kit</a>
         </div>
 
-        <div class="bundle-card featured">
-          <div class="badge">Most hung</div>
-          <div class="kit-label">Freelancer Kit</div>
-          <h3>For independent work</h3>
+        <div class="bundle-card">
+          <div class="kit-label">Kit</div>
+          <h3>Freelancer</h3>
+          <p class="bundle-tagline">For independent work</p>
           <div class="price">$40 <span>one-time</span></div>
           <p class="desc">Projects, payments, meetings, PDFs, and time — the daily stack for freelancers. Pay once, yours for good.</p>
           <ul class="bundle-list">
@@ -1125,12 +1137,13 @@
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>PDF ToolKit</li>
             <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>Time Tracker</li>
           </ul>
-          <a href="#preorder" class="btn preorder-select" data-kit="Freelancer Kit — $40 one-time">Preorder Freelancer Kit</a>
+          <a href="#preorder" class="btn btn-ghost preorder-select" data-kit="Freelancer Kit — $40 one-time">Preorder Freelancer Kit</a>
         </div>
 
         <div class="bundle-card">
-          <div class="kit-label">Small Business Kit</div>
-          <h3>For the shop floor</h3>
+          <div class="kit-label">Kit</div>
+          <h3>Small Business</h3>
+          <p class="bundle-tagline">For the shop floor</p>
           <div class="price">$60 <span>one-time</span></div>
           <p class="desc">Cards, team directory, QR codes, signatures, and bookkeeping — one payment, no renewals.</p>
           <ul class="bundle-list">
@@ -1174,8 +1187,8 @@
               <div class="field">
                 <label for="preorderKit">Kit</label>
                 <select id="preorderKit" name="kit">
-                  <option value="Student Kit — $20 one-time">Student Kit — $20 one-time</option>
-                  <option value="Freelancer Kit — $40 one-time" selected>Freelancer Kit — $40 one-time</option>
+                  <option value="Student Kit — $20 one-time" selected>Student Kit — $20 one-time</option>
+                  <option value="Freelancer Kit — $40 one-time">Freelancer Kit — $40 one-time</option>
                   <option value="Small Business Kit — $60 one-time">Small Business Kit — $60 one-time</option>
                 </select>
               </div>
